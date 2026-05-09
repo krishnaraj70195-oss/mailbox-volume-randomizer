@@ -118,7 +118,7 @@ class MailboxVolumeManager:
             response = requests.patch(
                 f"{self.base_url}/api/v2/accounts/{requests.utils.quote(email)}",
                 headers=self.headers,
-                json={"daily_campaign_limit": daily_limit}
+                json={"daily_limit": daily_limit}
             )
             response.raise_for_status()
             return True, None
