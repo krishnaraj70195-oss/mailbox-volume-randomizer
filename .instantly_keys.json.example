@@ -1,0 +1,11 @@
+{
+  "main": {
+    "token": "OWE0ZmQwOGYtNzlmOS00Y2IwLThkNzgtNTUyMWRmOGQzNWZkOmZMbEpMbmhtQmtJRw=="
+  },
+  "honza": {
+    "token": "MjQwMmVlMDctNDhmYy00NzNiLTk4OGMtODgyOTk5NGI0ZmFkOnF5S1ZUU25ZVkNxWQ=="
+  },
+  "backup": {
+    "token": "YOUR_BACKUP_TOKEN_HERE"
+  }
+}
