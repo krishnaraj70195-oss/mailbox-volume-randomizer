@@ -70,34 +70,37 @@ def main():
     mailbox_count = len(domain_mailboxes)
     print(f"✓ Found {mailbox_count} mailboxes on {domain}")
 
-    # Generate distribution
-    distribution = list(range(min_vol, max_vol + 1))
+    # Generate organic random distribution (not even patterns)
     volumes = []
+    remaining = total_sends
 
-    while len(volumes) < mailbox_count:
-        volumes.extend(distribution)
+    for i in range(mailbox_count):
+        # Calculate min/max for this mailbox to stay within target
+        mailboxes_left = mailbox_count - i
+        avg_needed = remaining / mailboxes_left
 
-    volumes = volumes[:mailbox_count]
-    current_total = sum(volumes)
-    diff = total_sends - current_total
+        # Random within range, biased toward average needed
+        min_possible = max(min_vol, int(avg_needed - (max_vol - min_vol) / 2))
+        max_possible = min(max_vol, int(avg_needed + (max_vol - min_vol) / 2))
 
-    # Adjust to hit target
-    if diff != 0:
-        for _ in range(abs(diff)):
-            if diff > 0:
-                # Need more: upgrade lower values
-                for i in range(len(volumes)):
-                    if volumes[i] < max_vol:
-                        volumes[i] += 1
-                        diff -= 1
-                        break
-            else:
-                # Need less: downgrade higher values
-                for i in range(len(volumes) - 1, -1, -1):
-                    if volumes[i] > min_vol:
-                        volumes[i] -= 1
-                        diff += 1
-                        break
+        # Clamp to valid range
+        min_possible = max(min_vol, min(max_possible - 1, min_possible))
+        max_possible = max(min_possible, min(max_vol, max_possible))
+
+        # Random value in range
+        volume = random.randint(min_possible, max_possible)
+        volumes.append(volume)
+        remaining -= volume
+
+    # Fine-tune remaining difference with organic adjustments
+    while remaining != 0:
+        idx = random.randint(0, len(volumes) - 1)
+        if remaining > 0 and volumes[idx] < max_vol:
+            volumes[idx] += 1
+            remaining -= 1
+        elif remaining < 0 and volumes[idx] > min_vol:
+            volumes[idx] -= 1
+            remaining += 1
 
     random.shuffle(volumes)
     final_total = sum(volumes)
