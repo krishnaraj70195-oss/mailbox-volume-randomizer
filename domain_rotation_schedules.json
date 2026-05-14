@@ -1,0 +1,47 @@
+{
+  "amanscaling.com": {
+    "mailboxes": 49,
+    "range": "1-4",
+    "target_range": "70-100",
+    "schedule": [85, 78, 92, 81, 89, 76, 95, 88, 72, 87, 94, 79, 84, 91, 83, 77, 99, 80, 86, 93, 74, 82, 97, 71, 90, 75, 100, 70, 98, 73],
+    "last_updated": "2026-05-15",
+    "note": "Warmup phase, monitor deliverability before scaling"
+  },
+  "heyamanacqs.com": {
+    "mailboxes": 49,
+    "range": "1-3",
+    "target_range": "70-100",
+    "schedule": [88, 76, 94, 83, 91, 72, 98, 81, 75, 89, 97, 79, 85, 92, 74, 100, 86, 70, 93, 82, 84, 77, 99, 80, 95, 71, 87, 90, 78, 73],
+    "last_updated": "2026-05-15",
+    "note": "Warmup phase, monitor deliverability before scaling"
+  },
+  "withamanacqs.com": {
+    "mailboxes": 49,
+    "range": "1-3",
+    "target_range": "70-100",
+    "schedule": [82, 77, 96, 79, 87, 74, 99, 84, 71, 91, 93, 80, 86, 89, 75, 98, 73, 100, 81, 92, 70, 85, 94, 83, 76, 90, 88, 72, 97, 78],
+    "last_updated": "2026-05-15",
+    "note": "Warmup phase, monitor deliverability before scaling"
+  },
+  "mysinghacqs.com": {
+    "mailboxes": 100,
+    "range": "1-3",
+    "target_range": "130-160",
+    "schedule": [145, 138, 152, 141, 149, 135, 158, 142, 132, 147, 155, 139, 144, 151, 137, 157, 143, 130, 150, 140, 146, 136, 154, 134, 148, 131, 160, 153, 133, 159],
+    "last_updated": "2026-05-15",
+    "note": "Warmup phase, monitor deliverability before scaling"
+  },
+  "thesinghacqs.com": {
+    "mailboxes": 100,
+    "range": "1-5",
+    "target_range": "130-160",
+    "schedule": [142, 139, 156, 137, 150, 133, 159, 144, 131, 148, 154, 135, 141, 152, 140, 158, 136, 130, 149, 143, 146, 132, 155, 138, 147, 134, 160, 151, 129, 157],
+    "last_updated": "2026-05-15",
+    "note": "Warmup phase, monitor deliverability before scaling"
+  },
+  "metadata": {
+    "created": "2026-05-15",
+    "description": "Persistent dynamic rotation schedules. Manually update ranges when ready to scale.",
+    "how_to_use": "Apply one target per day from the schedule. When ready to increase volume, update the range and regenerate schedule."
+  }
+}
