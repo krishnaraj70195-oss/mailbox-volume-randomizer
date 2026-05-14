@@ -1,279 +1,133 @@
-# Mailbox Volume Randomizer Skill
+# Mailbox Rotation Skill
 
-**Status**: ✅ Production Ready  
-**Purpose**: Randomize or set specific daily sending volumes on Instantly.ai mailboxes  
-**Tested**: May 9, 2026 (98 mailboxes across 2 domains)
-
----
-
-## What This Does
-
-Manages daily sending volumes across mailboxes to create natural sending patterns. Choose between:
-- **Randomize**: Vary volumes 0-4 to look organic
-- **Target**: Set specific per-domain daily volume (e.g., 100 emails/day per domain)
+**Status**: ✅ Interactive (Production Ready)  
+**Purpose**: Interactively apply randomized daily sending volumes to Instantly.ai mailboxes  
+**Input**: Domain, volume range (e.g., 1-6), total sends target  
 
 ---
 
 ## Quick Start
 
-### Randomize Volumes (Natural Pattern)
-
 ```bash
-python mailbox_volume_manager.py \
-  --token "YOUR_BASE64_TOKEN" \
-  --domains "domain1.com,domain2.com" \
-  --randomize
+python mailbox_rotation_skill.py
 ```
 
-### Set Target Daily Volume
+Then answer three prompts:
+1. **Domain**: `amanscaling.com`
+2. **Volume range**: `1-6` (or `2-8`, `1-4`, etc.)
+3. **Total emails/day**: `250` (or `300`, `500`, etc.)
 
-```bash
-python mailbox_volume_manager.py \
-  --token "YOUR_BASE64_TOKEN" \
-  --domains "domain1.com,domain2.com" \
-  --target-volume 100
+---
+
+## How It Works
+
+1. **Ask for domain** - Which domain to update?
+2. **Ask for range** - What volume range? (1-6, 2-8, 1-4, etc.)
+3. **Ask for target** - Total emails/day? (250, 300, 500, etc.)
+4. **Generate distribution** - Creates organic random spread across the range
+5. **Adjust to target** - Fine-tunes volumes to hit exact daily total
+6. **Dry run** - Shows what will be applied
+7. **Apply** - Confirms and updates all mailboxes
+
+---
+
+## Examples
+
+### Example 1: Conservative volume (1-4 range, 150 total)
+
+```
+Domain: mycompany.com
+Range: 1-4
+Target: 150
 ```
 
-### Dry Run (Preview Changes)
+Result (25 mailboxes):
+- 3 at 1 = 3
+- 5 at 2 = 10
+- 8 at 3 = 24
+- 9 at 4 = 36
+- Total: 73 (then adjusted to 150)
 
-```bash
-python mailbox_volume_manager.py \
-  --token "YOUR_BASE64_TOKEN" \
-  --domains "domain1.com,domain2.com" \
-  --target-volume 100 \
-  --dry-run
+### Example 2: Aggressive volume (1-8 range, 500 total)
+
+```
+Domain: leadgen.com
+Range: 1-8
+Target: 500
+```
+
+Result (50 mailboxes):
+- 2 at 3 = 6
+- 8 at 5 = 40
+- 15 at 6 = 90
+- 12 at 7 = 84
+- 13 at 8 = 104
+- Total: 500
+
+### Example 3: High volume (2-10 range, 600 total)
+
+```
+Domain: bigcampaign.com
+Range: 2-10
+Target: 600
 ```
 
 ---
 
 ## Installation
 
-### Step 1: Get API Token
+```bash
+# Clone the repo
+git clone https://github.com/krishnaraj70195-oss/mailbox-volume-randomizer.git
+cd mailbox-volume-randomizer
 
-1. Go to Instantly → Settings → API Keys
-2. Create v2 token (full base64 string, NOT decoded)
-3. Save to `~/.instantly_keys.json`:
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the skill
+python mailbox_rotation_skill.py
+```
+
+---
+
+## API Token Setup
+
+Add your Instantly API token to `~/.instantly_keys.json`:
 
 ```json
 {
-  "honza": {
-    "token": "MjQwMmVl...base64..."
-  },
   "main": {
-    "token": "OWE0Zm...base64..."
+    "token": "YOUR_BASE64_TOKEN_HERE"
   }
 }
 ```
 
-### Step 2: Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### Step 3: Make Executable
-
-```bash
-chmod +x mailbox_volume_manager.py
-```
-
----
-
-## Usage Modes
-
-### Mode 1: Randomized Distribution (0-4 range)
-
-Creates natural variation with fewer mailboxes at max:
-- 30% at 0 (don't send)
-- 20% at 1 email/day
-- 20% at 2 emails/day
-- 20% at 3 emails/day
-- 10% at 4 emails/day (max)
-
-**Use when:** You want organic-looking sending patterns
-
-```bash
-python mailbox_volume_manager.py \
-  --token "$(cat ~/.instantly_keys.json | jq -r .main.token)" \
-  --domains "withamanacqs.com,heyamanacqs.com" \
-  --randomize
-```
-
-### Mode 2: Target Volume (Specific Daily Total)
-
-Distributes volumes to hit target daily email count per domain.
-
-**For 49 mailboxes targeting 100 emails/day:**
-- 6 at 0 = 0 emails
-- 8 at 1 = 8 emails
-- 20 at 2 = 40 emails
-- 10 at 3 = 30 emails
-- 5 at 4 = 20 emails
-- **Total: 98 emails/day**
-
-**Use when:** You need predictable daily sending volume
-
-```bash
-python mailbox_volume_manager.py \
-  --token "YOUR_TOKEN" \
-  --domains "withamanacqs.com,heyamanacqs.com" \
-  --target-volume 100
-```
-
----
-
-## Python API
-
-```python
-from mailbox_volume_manager import MailboxVolumeManager
-
-manager = MailboxVolumeManager(token="YOUR_TOKEN")
-
-# Fetch all mailboxes
-mailboxes = manager.get_all_mailboxes()
-
-# Filter by domains
-target = manager.filter_by_domains(mailboxes, ["domain1.com", "domain2.com"])
-
-# Generate volumes
-volumes = manager.randomize_volumes(len(target))
-# OR
-volumes = manager.get_target_distribution(target_volume=100, mailbox_count=49)
-
-# Apply to mailboxes
-results = manager.apply_volumes(target, volumes)
-print(f"Updated: {results['successful']}/{results['total']}")
-```
-
----
-
-## API Reference
-
-### MailboxVolumeManager Class
-
-#### Methods
-
-| Method | Description |
-|--------|-------------|
-| `get_all_mailboxes()` | Fetch all mailboxes with pagination |
-| `filter_by_domains(mailboxes, domains)` | Filter by multiple domains |
-| `filter_by_domain(mailboxes, domain)` | Filter by single domain |
-| `randomize_volumes(count, distribution)` | Generate randomized volumes |
-| `get_target_distribution(target, count)` | Generate volumes for target total |
-| `update_mailbox_volume(email, limit)` | Update single mailbox |
-| `apply_volumes(mailboxes, volumes, dry_run)` | Apply volumes to batch |
-| `batch_update_domains(domains, target_volume, randomize, dry_run)` | Update multiple domains |
-
----
-
-## Examples
-
-### Example 1: Two domains, 100 emails each, 200 total
-
-```bash
-python mailbox_volume_manager.py \
-  --token "$(cat ~/.instantly_keys.json | jq -r .main.token)" \
-  --domains "withamanacqs.com,heyamanacqs.com" \
-  --target-volume 100
-```
-
-**Result:**
-```
-withamanacqs.com: 98 emails/day
-heyamanacqs.com: 98 emails/day
-Total: 196 emails/day
-```
-
-### Example 2: Randomize across 3 domains
-
-```bash
-python mailbox_volume_manager.py \
-  --token "YOUR_TOKEN" \
-  --domains "domain1.com,domain2.com,domain3.com" \
-  --randomize
-```
-
-### Example 3: Preview changes without updating
-
-```bash
-python mailbox_volume_manager.py \
-  --token "YOUR_TOKEN" \
-  --domains "domain.com" \
-  --target-volume 150 \
-  --dry-run
-```
-
-### Example 4: Use in Python script
-
-```python
-from mailbox_volume_manager import MailboxVolumeManager
-
-manager = MailboxVolumeManager(token="YOUR_TOKEN")
-
-# Randomize and apply
-results = manager.batch_update_domains(
-    domains=["domain1.com", "domain2.com"],
-    randomize=True
-)
-
-# Check results
-for domain, result in results.items():
-    if "error" not in result:
-        print(f"{domain}: {result['expected_volume']} emails/day")
-```
-
----
-
-## Configuration
-
-### Environment Variable
-
+Or use environment variable:
 ```bash
 export INSTANTLY_TOKEN="YOUR_BASE64_TOKEN"
-
-python mailbox_volume_manager.py \
-  --token $INSTANTLY_TOKEN \
-  --domains "domain.com" \
-  --target-volume 100
-```
-
-### Config File (~/.instantly_keys.json)
-
-```json
-{
-  "main": {
-    "token": "base64_token_here"
-  },
-  "backup": {
-    "token": "another_token"
-  }
-}
-```
-
-Extract with:
-```bash
-jq -r '.main.token' ~/.instantly_keys.json
+python mailbox_rotation_skill.py
 ```
 
 ---
 
-## Volume Guidelines
+## Supported Volume Ranges
 
-### Recommended Distributions
+- `1-4` - Conservative (light sending)
+- `1-6` - Moderate (medium volume)
+- `2-8` - Aggressive (higher volume)
+- `3-10` - Heavy (very high volume)
+- Any custom range: `1-5`, `2-7`, etc.
 
-| Use Case | Range | Example |
-|----------|-------|---------|
-| Natural/Organic | 0-4 | Randomize mode |
-| Low volume | 0-2 | 50 emails/day per domain |
-| Medium volume | 0-3 | 75 emails/day per domain |
-| High volume | 0-4 | 100+ emails/day per domain |
+---
 
-### Safe Limits
+## Best Practices
 
-- **Max per mailbox**: 4 emails/day (settable in Instantly UI)
-- **Max per domain**: Depends on SPF/DKIM setup and ISP acceptance
-- **Rate limit**: 100 requests/minute on Instantly API
-- **Batch size**: ~40-50 mailboxes per request
+1. **Start conservative** - Test with 1-4 range and 100-150 total
+2. **Dry run first** - Always check the distribution before applying
+3. **Organic patterns** - Don't use even distribution (use randomized)
+4. **Respect domain reputation** - Gradual increases work better
+5. **Monitor sends** - Check Instantly dashboard after applying
+6. **Update regularly** - Re-randomize every week or campaign reset
 
 ---
 
@@ -281,48 +135,31 @@ jq -r '.main.token' ~/.instantly_keys.json
 
 | Problem | Solution |
 |---------|----------|
-| `401 Unauthorized` | Token must be base64 encoded (full string, not decoded) |
-| `No mailboxes found` | Check domain spelling; verify mailboxes are enabled in Instantly |
-| `Rate limit (429)` | Instantly allows 100 reqs/min; space out bulk operations |
-| `AttributeError` | Ensure requests library is installed: `pip install requests` |
+| `No mailboxes found` | Check domain spelling and that mailboxes are enabled in Instantly |
+| `401 Unauthorized` | Verify API token is correct base64 string (full token, not decoded) |
+| `Invalid range` | Use format: `1-6` or `2-8` (no spaces) |
+| `Total too high` | Max = (mailbox_count × max_volume). E.g., 50 mailboxes at 6 max = 300 total |
 
 ---
 
-## For Teammates
+## For Teams
 
-### Share This Repo
+Share this skill with teammates:
 
 ```bash
 # Clone
 git clone https://github.com/krishnaraj70195-oss/mailbox-volume-randomizer.git
-cd mailbox-volume-randomizer
 
-# Install
-pip install -r requirements.txt
+# Setup token
+echo '{"main": {"token": "YOUR_TOKEN"}}' > ~/.instantly_keys.json
 
-# Add your token to ~/.instantly_keys.json
-# Then use the tool
+# Run
+python mailbox_rotation_skill.py
 ```
-
-### Quick Integration
-
-```bash
-# Use directly in scripts
-python mailbox_volume_manager.py --token $INSTANTLY_TOKEN --domains "domain.com" --target-volume 100
-```
-
----
-
-## Support
-
-For issues or questions:
-1. Check token format (must be base64, full string)
-2. Verify domain spelling and mailbox status in Instantly
-3. Test with `--dry-run` first to preview changes
-4. Check API status at dashboard.instantly.ai
 
 ---
 
 ## Version History
 
-- **v1.0** (May 9, 2026) - Initial release, tested with 98 mailboxes
+- **v1.1** (May 14, 2026) - Interactive skill added
+- **v1.0** (May 9, 2026) - Initial CLI release
