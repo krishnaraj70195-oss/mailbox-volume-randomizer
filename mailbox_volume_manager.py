@@ -141,7 +141,7 @@ class MailboxVolumeManager:
 
         for i, (mb, volume) in enumerate(zip(mailboxes, volumes)):
             email = mb.get("email")
-            current_limit = mb.get("daily_campaign_limit", 0)
+            current_limit = mb.get("daily_limit", 0)
 
             if current_limit == volume:
                 successful += 1
