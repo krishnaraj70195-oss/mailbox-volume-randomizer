@@ -15,6 +15,23 @@ Manage daily sending volumes for Instantly.ai mailboxes to create natural sendin
 
 ## Quick Start
 
+### Option A: Interactive Skill (Recommended) ⭐
+
+```bash
+git clone https://github.com/krishnaraj70195-oss/mailbox-volume-randomizer.git
+cd mailbox-volume-randomizer
+pip install -r requirements.txt
+
+python mailbox_rotation_skill.py
+```
+
+Then answer 3 prompts:
+1. Domain: `amanscaling.com`
+2. Volume range: `1-6` (or `2-8`, `1-4`, etc.)
+3. Total emails/day: `250` (or `300`, `500`, etc.)
+
+### Option B: CLI (Advanced)
+
 ### 1. Install
 
 ```bash
@@ -49,7 +66,20 @@ python mailbox_volume_manager.py \
 
 ## Usage
 
-### CLI
+### Interactive Skill (Easiest)
+
+```bash
+python mailbox_rotation_skill.py
+```
+
+Prompts for:
+- **Domain**: Which domain to update
+- **Range**: Volume range (1-4, 1-6, 2-8, etc.)
+- **Target**: Total emails/day (250, 300, 500, etc.)
+
+Auto-generates organic random distribution across mailboxes.
+
+### CLI (Advanced)
 
 ```bash
 # Randomize volumes across domains
