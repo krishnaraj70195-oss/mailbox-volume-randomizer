@@ -1,12 +1,30 @@
 # Mailbox Rotation Skill
 
-**Status**: ✅ Interactive (Production Ready)  
-**Purpose**: Interactively apply randomized daily sending volumes to Instantly.ai mailboxes  
-**Input**: Domain, volume range (e.g., 1-6), total sends target  
+**Status**: ✅ Production Ready (May 19, 2026)  
+**Two Systems**:
+1. **Interactive Skill** - Manual one-off volume changes
+2. **GitHub Actions Auto-Rotation** - Daily automatic rotation (FREE - see GITHUB_ACTIONS_SETUP.md)
 
 ---
 
-## Quick Start
+## 🚀 GitHub Actions Auto-Rotation (NEW)
+
+**Status**: ✅ LIVE  
+**Cost**: FREE (GitHub free tier)  
+**Schedule**: Daily 9 AM IST
+
+Replaces the old Railway scheduler. See **GITHUB_ACTIONS_SETUP.md** for complete setup.
+
+**Current 5-Domain Configuration** (1,028 emails/day):
+- withamanacqs.com: 163/day (49 mailboxes, 1-5 range)
+- heyamanacqs.com: 159/day (49 mailboxes, 1-5 range)
+- amanscaling.com: 160/day (49 mailboxes, 1-5 range)
+- mysinghacqs.com: 276/day (100 mailboxes, 1-5 range)
+- thesinghacqs.com: 270/day (100 mailboxes, 1-5 range)
+
+---
+
+## 🎯 Interactive Skill - Quick Start
 
 ```bash
 python mailbox_rotation_skill.py
@@ -161,5 +179,16 @@ python mailbox_rotation_skill.py
 
 ## Version History
 
+- **v2.0** (May 19, 2026) - GitHub Actions auto-rotation added (replaces Railway, FREE tier)
 - **v1.1** (May 14, 2026) - Interactive skill added
 - **v1.0** (May 9, 2026) - Initial CLI release
+
+---
+
+## Migration from Railway (May 19, 2026)
+
+**Old System**: Railway scheduler ($5-10/month)  
+**New System**: GitHub Actions (FREE)  
+**Savings**: $60-120/year  
+
+See GITHUB_ACTIONS_SETUP.md for migration details.
