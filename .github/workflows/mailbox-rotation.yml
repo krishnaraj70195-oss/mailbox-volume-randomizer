@@ -1,0 +1,39 @@
+name: Mailbox Daily Rotation
+
+on:
+  schedule:
+    # 9 AM IST = 3:30 AM UTC
+    - cron: '30 3 * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  rotate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pytz
+
+      - name: Run daily rotation
+        env:
+          INSTANTLY_API_TOKEN: ${{ secrets.INSTANTLY_API_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: python3 auto_daily_rotation.py
+
+      - name: Upload rotation status
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: rotation-status
+          path: rotation_status.json
+          retention-days: 30
